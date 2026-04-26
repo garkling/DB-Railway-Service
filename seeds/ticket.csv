@@ -1,0 +1,17 @@
+train_number,service_date,ticket_number,seat_number,price_paid,booking_date,passenger_id,class_code,booking_status,payment_method
+IC-701,2026-04-01,1,1A,675.00,2026-03-20,P001,1ST,confirmed,card
+IC-701,2026-04-01,2,2A,270.00,2026-03-20,P002,2ND,confirmed,card
+IC-701,2026-04-01,3,1B,675.00,2026-03-21,P003,1ST,confirmed,cash
+IC-701,2026-04-01,4,3A,810.00,2026-03-22,P004,SLP,refunded,card
+IC-703,2026-04-01,1,2A,270.00,2026-03-25,P001,2ND,confirmed,card
+IC-703,2026-04-01,2,1A,675.00,2026-03-25,P005,1ST,cancelled,card
+R-201,2026-04-01,1,1A,100.00,2026-03-28,P003,2ND,confirmed,cash
+R-201,2026-04-01,2,1B,100.00,2026-03-28,P004,2ND,confirmed,cash
+R-201,2026-04-01,3,2A,100.00,2026-03-29,P005,2ND,confirmed,card
+R-201,2026-04-01,4,2B,100.00,2026-03-29,P006,2ND,confirmed,card
+R-201,2026-04-01,5,2C,100.00,2026-03-30,P001,2ND,confirmed,card
+IC-501,2026-04-02,1,2A,240.00,2026-03-20,P002,2ND,confirmed,card
+IC-501,2026-04-02,2,1A,600.00,2026-03-20,P006,1ST,confirmed,card
+R-101,2026-04-01,1,1A,135.00,2026-03-22,P005,2ND,confirmed,card
+R-101,2026-04-01,2,1B,135.00,2026-03-22,P006,2ND,confirmed,card
+IC-801,2026-04-02,1,1A,780.00,2026-03-18,P004,1ST,confirmed,card

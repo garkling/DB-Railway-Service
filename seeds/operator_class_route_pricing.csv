@@ -1,0 +1,11 @@
+operator_code,class_code,route_id,base_price
+UZ,1ST,1,675.00
+UZ,2ND,1,270.00
+UZ,SLP,1,810.00
+UZ,1ST,2,600.00
+UZ,2ND,2,240.00
+UZ,SLP,2,720.00
+RT,2ND,1,135.00
+RT,2ND,3,100.00
+PKP,1ST,4,780.00
+PKP,2ND,4,390.00

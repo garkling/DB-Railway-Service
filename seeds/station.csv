@@ -1,0 +1,12 @@
+station_code,station_name,city,country,number_of_platforms
+220010,Lviv,Lviv,Ukraine,8
+220050,Ternopil,Ternopil,Ukraine,4
+220090,Khmelnytskyi,Khmelnytskyi,Ukraine,5
+220130,Vinnytsia,Vinnytsia,Ukraine,6
+220200,Kyiv-Pasazhyrskyi,Kyiv,Ukraine,14
+220250,Bila Tserkva,Bila Tserkva,Ukraine,3
+220300,Uman,Uman,Ukraine,3
+220400,Odesa-Holovna,Odesa,Ukraine,10
+515700,Przemysl Glowny,Przemysl,Poland,5
+220350,Kharkiv-Pasazhyrskyi,Kharkiv,Ukraine,12
+220170,Poltava-Kyivska,Poltava,Ukraine,6

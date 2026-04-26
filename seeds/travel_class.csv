@@ -1,0 +1,4 @@
+class_code,class_name,description,base_price_multiplier
+1ST,First Class,Premium seating with extra legroom and complimentary services,2.50
+2ND,Second Class,Standard comfortable seating with basic amenities,1.00
+SLP,Sleeping Class,Private sleeping compartments with beds and linens,3.00

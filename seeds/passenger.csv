@@ -1,0 +1,7 @@
+passenger_id,first_name,last_name,date_of_birth,email
+P001,Oleksandr,Kovalenko,1985-03-15,oleksandr.k@gmail.com
+P002,Maria,Shevchenko,1990-07-22,maria.shev@ukr.net
+P003,Ivan,Bondarenko,1978-11-03,ivan.bond@gmail.com
+P004,Yulia,Tkachenko,1995-01-18,yulia.tk@outlook.com
+P005,Dmytro,Melnyk,1988-06-30,dmytro.m@gmail.com
+P006,Anna,Kravchenko,2000-12-05,anna.krav@gmail.com

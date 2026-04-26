@@ -1,0 +1,5 @@
+route_id,route_name,total_distance_km
+1,Lviv-Kyiv,540.00
+2,Kyiv-Odesa,480.00
+3,Lviv-Przemysl,100.00
+4,Kyiv-Kharkiv,470.00
