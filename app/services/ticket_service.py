@@ -24,7 +24,7 @@ class TicketService:
         self._engine = engine
 
     def issue_ticket(self, cmd: IssueTicketCommand) -> Ticket:
-        """Issue a new ticket; orchestrates the 6 SQL queries from APD-007 §1.8.
+        """Issue a new ticket; orchestrates the 6 SQL queries.
 
         1. SELECT 1 FROM passenger WHERE passenger_id = :passenger_id LIMIT 1
         2. SELECT ... FROM train WHERE train_number = :tn AND service_date = :sd
@@ -84,7 +84,7 @@ class TicketService:
             return TicketRepository(conn).list_for_train(train_number, service_date)
 
     def cancel_ticket(self, cmd: CancelTicketCommand) -> CancelTicketResult:
-        """Delete a ticket; per APD-007 §3.
+        """Delete a ticket;
 
         SQL queries fired in order inside engine.begin():
           1. SELECT ... FROM ticket WHERE PK              -- captures the ticket data

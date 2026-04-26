@@ -17,7 +17,7 @@ class TrainService:
     def reschedule_train(
         self, cmd: RescheduleTrainCommand,
     ) -> RescheduleTrainResult:
-        """Reschedule a train; cascade UPDATE per APD-007 §2.
+        """Reschedule a train; cascade UPDATE.
 
         9 SQL queries fire in order inside engine.begin():
           1. SELECT 1 FROM train WHERE current_pk LIMIT 1

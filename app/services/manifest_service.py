@@ -17,9 +17,9 @@ class TrainManifestService:
         self._engine = engine
 
     def build(self, train_number: str, service_date: date) -> TrainManifest:
-        """Build a train manifest payload (APD-007 §5).
+        """Build a train manifest payload.
 
-        Composition is in Python (no JOINs across aggregates) per APD-004 §7.2.
+        Composition is in Python (no JOINs across aggregates).
         SQL queries fired in order, all read-only inside engine.connect():
 
           1. SELECT ... FROM train         WHERE train_number = :tn AND service_date = :sd

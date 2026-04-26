@@ -16,9 +16,9 @@ class RoutePricingService:
         operator_filter: str | None = None,
         route_filter: int | None = None,
     ) -> RoutePricingSchedule:
-        """Build the route pricing schedule (APD-007 §6).
+        """Build the route pricing schedule.
 
-        Composition is in Python (no JOINs across aggregates) per APD-004 §7.
+        Composition is in Python (no JOINs across aggregates).
         SQL queries fired in order, all read-only inside engine.connect():
 
           1. SELECT ... FROM operator_class_route_pricing
