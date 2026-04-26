@@ -1,0 +1,8 @@
+train_number,service_date,scheduled_departure,scheduled_arrival,duration_minutes,train_status,operator_code,route_id,actual_departure,actual_arrival,delay_reason
+IC-501,2026-04-02,2026-04-02 06:00:00,2026-04-02 11:30:00,330,on_time,UZ,2,,,
+IC-701,2026-04-01,2026-04-01 07:00:00,2026-04-01 13:30:00,390,on_time,UZ,1,2026-04-01 07:00:00,2026-04-01 13:32:00,
+IC-703,2026-04-01,2026-04-01 15:00:00,2026-04-01 21:00:00,360,delayed,UZ,1,2026-04-01 15:25:00,2026-04-01 21:30:00,Switching incident at Vinnytsia
+IC-705,2026-04-03,2026-04-03 07:30:00,2026-04-03 13:45:00,375,on_time,UZ,1,,,
+IC-801,2026-04-02,2026-04-02 08:00:00,2026-04-02 14:00:00,360,cancelled,PKP,4,,,Crew shortage — service cancelled
+R-101,2026-04-01,2026-04-01 09:00:00,2026-04-01 15:30:00,390,delayed,RT,1,2026-04-01 09:15:00,2026-04-01 15:55:00,Locomotive change at Lviv
+R-201,2026-04-01,2026-04-01 08:30:00,2026-04-01 10:00:00,90,on_time,RT,3,,,
