@@ -215,41 +215,11 @@ db-hw3-railway-service/
 └── Makefile                     up/down/migrate/reset/wipe/test/run/...
 ```
 
-## 7. Dependencies
-
-From `pyproject.toml`:
-
-```toml
-[project]
-requires-python = ">=3.13"
-dependencies = [
-    "fastapi>=0.110",          # HTTP framework with auto Swagger UI
-    "uvicorn[standard]>=0.27", # ASGI server
-    "jinja2>=3.1",             # server-rendered HTML
-    "sqlalchemy>=2.0",         # raw SQL via Core (NO ORM — every statement is visible)
-    "pymysql>=1.1",            # sync MySQL driver
-    "cryptography>=42",        # for PyMySQL caching_sha2_password (MySQL 8 default auth)
-    "pydantic>=2.5",           # DTO validation
-    "pydantic-settings>=2.1",  # .env loader for app/config.py
-    "python-dotenv>=1.0",      # .env loader for migrate.py (CLI-side)
-    "python-multipart>=0.0.9", # FastAPI Form() parsing
-]
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=8.0",
-    "httpx>=0.27",             # FastAPI TestClient transport
-]
-```
-
-No SQLAlchemy ORM, no async DB driver, no auth/sessions, no caching layer, no message queue. One process talking to one DB — the rubric optimizes for clarity over scale.
-
 ## 8. Useful links
 
 ### FastAPI / Pydantic
 
 - **FastAPI tutorial** — <https://fastapi.tiangolo.com/tutorial/> — start here if FastAPI is new
-- **FastAPI advanced (templates, dependencies, errors)** — <https://fastapi.tiangolo.com/advanced/templates/>
 - **Pydantic v2 docs** — <https://docs.pydantic.dev/latest/>
 
 ### SQLAlchemy Core (no ORM)
@@ -261,7 +231,6 @@ No SQLAlchemy ORM, no async DB driver, no auth/sessions, no caching layer, no me
 ### MySQL 8.4
 
 - **Reference manual** — <https://dev.mysql.com/doc/refman/8.4/en/>
-- **Foreign key referential actions** (we use `ON UPDATE CASCADE`) — <https://dev.mysql.com/doc/refman/8.4/en/create-table-foreign-keys.html#foreign-key-referential-actions>
 
 ### Jinja2
 
@@ -270,7 +239,6 @@ No SQLAlchemy ORM, no async DB driver, no auth/sessions, no caching layer, no me
 ### pytest
 
 - **Documentation** — <https://docs.pytest.org/en/stable/>
-- **Fixtures (the reason `conftest.py` works)** — <https://docs.pytest.org/en/stable/explanation/fixtures.html>
 
 ### Reference projects
 
