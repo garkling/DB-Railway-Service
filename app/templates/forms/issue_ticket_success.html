@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Ticket Issued{% endblock %}
+{% block content %}
+<h1>Ticket Issued</h1>
+<p class="success">Ticket #{{ ticket.ticket_number }} created successfully on {{ ticket.train_number }} ({{ ticket.service_date }}).</p>
+
+<table class="ticket-detail">
+    <tr><th>Train</th><td>{{ ticket.train_number }}</td></tr>
+    <tr><th>Service date</th><td>{{ ticket.service_date }}</td></tr>
+    <tr><th>Ticket #</th><td>{{ ticket.ticket_number }}</td></tr>
+    <tr><th>Seat</th><td>{{ ticket.seat_number or '(unassigned)' }}</td></tr>
+    <tr><th>Passenger</th><td>{{ ticket.passenger_id }}</td></tr>
+    <tr><th>Class</th><td>{{ ticket.class_code }}</td></tr>
+    <tr><th>Price paid</th><td>{{ ticket.price_paid }}</td></tr>
+    <tr><th>Booking date</th><td>{{ ticket.booking_date }}</td></tr>
+    <tr><th>Status</th><td>{{ ticket.booking_status }}</td></tr>
+    <tr><th>Payment</th><td>{{ ticket.payment_method }}</td></tr>
+</table>
+
+<h2>All tickets on {{ ticket.train_number }} ({{ ticket.service_date }})</h2>
+<table class="snapshot">
+    <thead>
+        <tr>
+            <th>#</th><th>Seat</th><th>Passenger</th><th>Class</th>
+            <th>Price</th><th>Status</th><th>Booked</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in tickets_snapshot %}
+        <tr {% if t.ticket_number == ticket.ticket_number %}class="new"{% endif %}>
+            <td>{{ t.ticket_number }}</td>
+            <td>{{ t.seat_number or '—' }}</td>
+            <td>{{ t.passenger_id }}</td>
+            <td>{{ t.class_code }}</td>
+            <td>{{ t.price_paid }}</td>
+            <td>{{ t.booking_status }}</td>
+            <td>{{ t.booking_date }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p>
+    <a href="/forms/issue-ticket">Issue another ticket</a> ·
+    <a href="/">Home</a>
+</p>
+{% endblock %}

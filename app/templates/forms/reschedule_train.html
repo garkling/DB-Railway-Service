@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Reschedule Train{% endblock %}
+{% block content %}
+<h1>Reschedule Train</h1>
+<p>Change a train's identifier (PK) and/or its scheduled times. The cascade will move all related coaches and tickets to the new PK automatically.</p>
+
+{% if errors %}
+<div class="errors">
+    <h3>Validation errors</h3>
+    <ul>
+        {% for err in errors %}
+        <li><strong>{{ err.loc | join('.') }}</strong>: {{ err.msg }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<form method="post" action="/forms/reschedule-train">
+    <label>
+        Current train:
+        <select name="current_train_number" required onchange="onTrainChange(this)">
+            <option value="">— select —</option>
+            {% for t in trains %}
+            <option value="{{ t.train_number }}"
+                    data-service-date="{{ t.service_date }}"
+                    data-departure="{{ t.scheduled_departure.strftime('%Y-%m-%dT%H:%M') }}"
+                    data-arrival="{{ t.scheduled_arrival.strftime('%Y-%m-%dT%H:%M') }}"
+                    {% if values.current_train_number == t.train_number %}selected{% endif %}>
+                {{ t.train_number }} on {{ t.service_date }} ({{ t.train_status }})
+            </option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>
+        Current service date:
+        <input type="date" name="current_service_date" required value="{{ values.current_service_date or '' }}" readonly>
+    </label>
+
+    <hr>
+
+    <label>
+        New train number:
+        <input type="text" name="new_train_number" maxlength="10" required value="{{ values.new_train_number or '' }}">
+    </label>
+
+    <label>
+        New service date:
+        <input type="date" name="new_service_date" required value="{{ values.new_service_date or '' }}">
+    </label>
+
+    <label>
+        New scheduled departure:
+        <input type="datetime-local" name="new_scheduled_departure" required value="{{ values.new_scheduled_departure or '' }}">
+    </label>
+
+    <label>
+        New scheduled arrival:
+        <input type="datetime-local" name="new_scheduled_arrival" required value="{{ values.new_scheduled_arrival or '' }}">
+    </label>
+
+    <button type="submit">Reschedule</button>
+</form>
+
+<script>
+function onTrainChange(sel) {
+    const opt = sel.options[sel.selectedIndex];
+    const sd = opt.getAttribute('data-service-date');
+    const dep = opt.getAttribute('data-departure');
+    const arr = opt.getAttribute('data-arrival');
+    if (sd) document.querySelector('input[name=current_service_date]').value = sd;
+    if (dep) document.querySelector('input[name=new_scheduled_departure]').value = dep;
+    if (arr) document.querySelector('input[name=new_scheduled_arrival]').value = arr;
+}
+</script>
+
+<p><a href="/">← Home</a></p>
+{% endblock %}

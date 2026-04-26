@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Train Manifest{% endblock %}
+{% block content %}
+<h1 class="page-title">Train Manifest</h1>
+
+<div class="report-form">
+    <form method="get" action="/reports/train-manifest">
+        <label>
+            Train:
+            <select name="train" required onchange="onTrainChange(this)">
+                <option value="">— select —</option>
+                {% for t in trains %}
+                <option value="{{ t.train_number }}"
+                        data-service-date="{{ t.service_date }}"
+                        {% if values.train == t.train_number %}selected{% endif %}>
+                    {{ t.train_number }} on {{ t.service_date }} ({{ t.train_status }})
+                </option>
+                {% endfor %}
+            </select>
+        </label>
+        <input type="hidden" name="date" id="date-input" value="{{ values.service_date }}">
+        <button type="submit">View manifest</button>
+    </form>
+</div>
+
+{% if manifest %}
+<article class="manifest">
+    <header class="manifest-header">
+        <div class="m-title">
+            Train Manifest — <strong>{{ manifest.train_number }}</strong>
+            on {{ manifest.service_date }}
+        </div>
+        <table class="m-meta">
+            <tr><th>Operator</th><td>{{ manifest.operator_name }} ({{ manifest.operator_code }})</td></tr>
+            <tr><th>Route</th><td>{{ manifest.route_name }} (id #{{ manifest.route_id }})</td></tr>
+            <tr><th>Scheduled departure</th><td>{{ manifest.scheduled_departure }}</td></tr>
+            <tr><th>Scheduled arrival</th><td>{{ manifest.scheduled_arrival }}</td></tr>
+            <tr><th>Total passengers</th><td><strong>{{ manifest.total_passengers }}</strong></td></tr>
+        </table>
+    </header>
+
+    {% if manifest.rows %}
+    <table class="manifest-rows">
+        <thead>
+            <tr>
+                <th>Ticket #</th>
+                <th>Seat</th>
+                <th>Passenger ID</th>
+                <th>Passenger Name</th>
+                <th>Class</th>
+                <th>Price paid</th>
+                <th>Booking date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in manifest.rows %}
+            <tr>
+                <td class="m-num">{{ r.ticket_number }}</td>
+                <td>{{ r.seat_number or '—' }}</td>
+                <td>{{ r.passenger_id }}</td>
+                <td>{{ r.passenger_full_name }}</td>
+                <td>{{ r.class_name }} <span class="muted">({{ r.class_code }})</span></td>
+                <td class="m-num">{{ r.price_paid }}</td>
+                <td>{{ r.booking_date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="muted m-empty">No tickets booked.</p>
+    {% endif %}
+</article>
+
+<p class="print-link"><button type="button" onclick="window.print()">Print</button></p>
+{% endif %}
+
+<script>
+const trainSel = document.querySelector('select[name=train]');
+const dateInput = document.getElementById('date-input');
+
+function onTrainChange(sel) {
+    const opt = sel.options[sel.selectedIndex];
+    const sd = opt ? opt.getAttribute('data-service-date') || '' : '';
+    dateInput.value = sd;
+}
+</script>
+
+<p class="home-link"><a href="/">← Home</a></p>
+{% endblock %}

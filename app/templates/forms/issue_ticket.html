@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Issue Ticket{% endblock %}
+{% block content %}
+<h1>Issue Ticket</h1>
+<p>Sell a new ticket to a passenger for a scheduled train.</p>
+
+{% if errors %}
+<div class="errors">
+    <h3>Validation errors</h3>
+    <ul>
+        {% for err in errors %}
+        <li><strong>{{ err.loc | join('.') }}</strong>: {{ err.msg }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<form method="post" action="/forms/issue-ticket">
+    <label>
+        Train:
+        <select name="train_number" required onchange="onTrainChange(this)">
+            <option value="">— select —</option>
+            {% for t in trains %}
+            <option value="{{ t.train_number }}"
+                    data-service-date="{{ t.service_date }}"
+                    {% if values.train_number == t.train_number %}selected{% endif %}>
+                {{ t.train_number }} on {{ t.service_date }} ({{ t.train_status }})
+            </option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>
+        Service date:
+        <input type="date" name="service_date" required value="{{ values.service_date or '' }}">
+    </label>
+
+    <label>
+        Passenger:
+        <select name="passenger_id" required>
+            <option value="">— select —</option>
+            {% for p in passengers %}
+            <option value="{{ p.passenger_id }}"
+                    {% if values.passenger_id == p.passenger_id %}selected{% endif %}>
+                {{ p.passenger_id }} — {{ p.full_name }}
+            </option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>
+        Travel class:
+        <select name="class_code" required>
+            <option value="">— select —</option>
+            {% for c in classes %}
+            <option value="{{ c.class_code }}"
+                    {% if values.class_code == c.class_code %}selected{% endif %}>
+                {{ c.class_code }} — {{ c.class_name }}
+            </option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>
+        Seat (optional):
+        <input type="text" name="seat_number" maxlength="10"
+               value="{{ values.seat_number or '' }}">
+    </label>
+
+    <button type="submit">Issue ticket</button>
+</form>
+
+<script>
+function onTrainChange(sel) {
+    const opt = sel.options[sel.selectedIndex];
+    const dt = opt.getAttribute('data-service-date');
+    if (dt) {
+        document.querySelector('input[name=service_date]').value = dt;
+    }
+}
+</script>
+
+<p><a href="/">← Home</a></p>
+{% endblock %}

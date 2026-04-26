@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Route Pricing Schedule{% endblock %}
+{% block content %}
+<h1 class="page-title">Route Pricing Schedule</h1>
+
+<div class="report-form">
+    <form method="get" action="/reports/route-pricing">
+        <label>
+            Operator:
+            <select name="operator">
+                <option value="">— All operators —</option>
+                {% for op in operators %}
+                <option value="{{ op.operator_code }}"
+                        {% if values.operator == op.operator_code %}selected{% endif %}>
+                    {{ op.operator_code }} — {{ op.operator_name }}
+                </option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>
+            Route:
+            <select name="route">
+                <option value="">— All routes —</option>
+                {% for r in routes %}
+                <option value="{{ r.route_id }}"
+                        {% if values.route == r.route_id|string %}selected{% endif %}>
+                    #{{ r.route_id }} — {{ r.route_name }}
+                </option>
+                {% endfor %}
+            </select>
+        </label>
+        <button type="submit">Apply filters</button>
+    </form>
+</div>
+
+<article class="tariff">
+    {% if schedule.rows %}
+    <table class="tariff-rows">
+        <thead>
+            <tr>
+                <th>Operator</th>
+                <th>Class</th>
+                <th>Route</th>
+                <th class="m-num">Distance (km)</th>
+                <th class="m-num">Multiplier</th>
+                <th class="m-num">Base Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in schedule.rows %}
+            <tr>
+                <td>{{ r.operator_name }} <span class="muted">({{ r.operator_code }})</span></td>
+                <td>{{ r.class_name }} <span class="muted">({{ r.class_code }})</span></td>
+                <td>{{ r.route_name }} <span class="muted">(#{{ r.route_id }})</span></td>
+                <td class="m-num">{{ r.total_distance_km if r.total_distance_km is not none else '—' }}</td>
+                <td class="m-num">{{ r.distance_price_multiplier if r.distance_price_multiplier is not none else '—' }}</td>
+                <td class="m-num"><strong>{{ r.base_price }}</strong></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p class="tariff-total">
+        Total: <strong>{{ schedule.rows | length }}</strong>
+        pricing entr{{ 'y' if schedule.rows | length == 1 else 'ies' }}.
+    </p>
+    {% else %}
+    <p class="muted m-empty">No pricing entries match the selected filters.</p>
+    {% endif %}
+</article>
+
+{% if schedule.rows %}
+<p class="print-link"><button type="button" onclick="window.print()">Print</button></p>
+{% endif %}
+
+<p class="home-link"><a href="/">← Home</a></p>
+{% endblock %}

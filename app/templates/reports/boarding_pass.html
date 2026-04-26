@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block title %}Boarding Pass{% endblock %}
+{% block content %}
+<h1 class="page-title">Boarding Pass</h1>
+
+<div class="report-form">
+    <form method="get" action="/reports/boarding-pass">
+        <label>
+            Train:
+            <select name="train" id="train-select" required onchange="onTrainChange(this)">
+                <option value="">— select —</option>
+                {% for t in trains %}
+                <option value="{{ t.train_number }}"
+                        data-service-date="{{ t.service_date }}"
+                        {% if values.train == t.train_number %}selected{% endif %}>
+                    {{ t.train_number }} on {{ t.service_date }}
+                </option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <input type="hidden" name="date" id="date-input" value="{{ values.service_date }}">
+
+        <label>
+            Ticket:
+            <select name="ticket" id="ticket-select" required {% if not values.train %}disabled{% endif %}>
+                <option value="">— pick a train first —</option>
+            </select>
+        </label>
+
+        <button type="submit">View boarding pass</button>
+    </form>
+</div>
+
+{% if boarding_pass %}
+<article class="boarding-pass">
+    <div class="bp-main">
+        <header class="bp-header">
+            <div class="bp-operator">{{ boarding_pass.operator_name }}</div>
+            <div class="bp-train-block">
+                <div class="bp-train">{{ boarding_pass.train_number }}</div>
+                <div class="bp-service-date">{{ boarding_pass.service_date }}</div>
+            </div>
+        </header>
+
+        <section class="bp-route">
+            <div class="bp-station origin">
+                <div class="bp-label">From</div>
+                <div class="bp-station-name">{{ boarding_pass.origin_station or '—' }}</div>
+                <div class="bp-time">{{ boarding_pass.scheduled_departure.strftime('%H:%M') }}</div>
+                <div class="bp-date">{{ boarding_pass.scheduled_departure.strftime('%Y-%m-%d') }}</div>
+            </div>
+            <div class="bp-arrow">→</div>
+            <div class="bp-station destination">
+                <div class="bp-label">To</div>
+                <div class="bp-station-name">{{ boarding_pass.destination_station or '—' }}</div>
+                <div class="bp-time">{{ boarding_pass.scheduled_arrival.strftime('%H:%M') }}</div>
+                <div class="bp-date">{{ boarding_pass.scheduled_arrival.strftime('%Y-%m-%d') }}</div>
+            </div>
+        </section>
+
+        <section class="bp-passenger">
+            <div class="bp-label">Passenger</div>
+            <div class="bp-pax-name">{{ boarding_pass.passenger_full_name }}</div>
+        </section>
+
+        <section class="bp-class-seat">
+            <div class="bp-class">
+                <div class="bp-label">Class</div>
+                <div class="bp-class-name">{{ boarding_pass.class_name }}</div>
+                {% if boarding_pass.class_description %}
+                <div class="bp-class-desc">{{ boarding_pass.class_description }}</div>
+                {% endif %}
+            </div>
+            <div class="bp-seat">
+                <div class="bp-label">Seat</div>
+                <div class="bp-big">{{ boarding_pass.seat_number or '—' }}</div>
+            </div>
+            <div class="bp-price">
+                <div class="bp-label">Price paid</div>
+                <div class="bp-big">{{ boarding_pass.price_paid }}</div>
+            </div>
+        </section>
+
+        <footer class="bp-footer">
+            <span>Booked: {{ boarding_pass.booking_date }}</span>
+            <span>Ticket #: {{ boarding_pass.ticket_number }}</span>
+        </footer>
+    </div>
+
+    {% set qr_payload = "https://www.uz.gov.ua/" ~ boarding_pass.train_number ~ "/" ~ boarding_pass.service_date ~ "/" ~ boarding_pass.ticket_number %}
+    <aside class="bp-stub">
+        <img class="bp-qr" src="{{ qr_payload | qr_data_uri }}" alt="Boarding pass QR code">
+        <div class="bp-stub-meta">
+            <div class="bp-label">Ticket</div>
+            <div class="bp-stub-train">{{ boarding_pass.train_number }}</div>
+            <div class="bp-stub-date">{{ boarding_pass.service_date }}</div>
+            <div class="bp-stub-num">#{{ boarding_pass.ticket_number }}</div>
+        </div>
+    </aside>
+</article>
+
+<p class="print-link"><button type="button" onclick="window.print()">Print</button></p>
+{% endif %}
+
+<script>
+const trainSel = document.getElementById('train-select');
+const ticketSel = document.getElementById('ticket-select');
+const dateInput = document.getElementById('date-input');
+const preselectedTicket = "{{ values.ticket }}";
+
+function onTrainChange(sel) {
+    const opt = sel.options[sel.selectedIndex];
+    const sd = opt ? opt.getAttribute('data-service-date') || '' : '';
+    dateInput.value = sd;
+    if (!sel.value) {
+        ticketSel.disabled = true;
+        ticketSel.innerHTML = '<option value="">— pick a train first —</option>';
+        return;
+    }
+    loadTickets(sel.value, sd);
+}
+
+async function loadTickets(trainNumber, serviceDate) {
+    const url = `/api/lookups/tickets-for-train/${encodeURIComponent(trainNumber)}/${encodeURIComponent(serviceDate)}`;
+    const r = await fetch(url);
+    if (!r.ok) {
+        ticketSel.disabled = true;
+        ticketSel.innerHTML = '<option value="">— failed to load tickets —</option>';
+        return;
+    }
+    const tickets = await r.json();
+    ticketSel.disabled = false;
+    ticketSel.innerHTML = '<option value="">— select —</option>' +
+        tickets.map(t => {
+            const sel = String(t.ticket_number) === preselectedTicket ? ' selected' : '';
+            return `<option value="${t.ticket_number}"${sel}>#${t.ticket_number} — ${t.passenger_id} (${t.class_code}, seat ${t.seat_number || '—'})</option>`;
+        }).join('');
+}
+
+if (trainSel.value && dateInput.value) loadTickets(trainSel.value, dateInput.value);
+</script>
+
+<p class="home-link"><a href="/">← Home</a></p>
+{% endblock %}

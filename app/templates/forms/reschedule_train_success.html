@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block title %}Train Rescheduled{% endblock %}
+{% block content %}
+<h1>Train Rescheduled</h1>
+<p class="success">
+    Train moved from
+    <strong>{{ result.before.train.train_number }} ({{ result.before.train.service_date }})</strong>
+    →
+    <strong>{{ result.updated_train.train_number }} ({{ result.updated_train.service_date }})</strong>.
+    Cascade carried <strong>{{ result.after.coaches | length }}</strong> coach(es)
+    and <strong>{{ result.after.tickets | length }}</strong> ticket(s) to the new PK.
+</p>
+
+<div class="cascade-grid">
+
+    <div class="pane before">
+        <h3>train (before)</h3>
+        {% if result.before.train %}
+        <table class="snapshot">
+            <thead>
+                <tr><th>train_number</th><th>service_date</th><th>scheduled_departure</th><th>scheduled_arrival</th><th>train_status</th><th>operator_code</th><th>route_id</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ result.before.train.train_number }}</td>
+                    <td>{{ result.before.train.service_date }}</td>
+                    <td>{{ result.before.train.scheduled_departure }}</td>
+                    <td>{{ result.before.train.scheduled_arrival }}</td>
+                    <td>{{ result.before.train.train_status }}</td>
+                    <td>{{ result.before.train.operator_code }}</td>
+                    <td>{{ result.before.train.route_id }}</td>
+                </tr>
+            </tbody>
+        </table>
+        {% else %}<p class="muted">(no row)</p>{% endif %}
+    </div>
+
+    <div class="pane after">
+        <h3>train (after)</h3>
+        {% if result.after.train %}
+        <table class="snapshot">
+            <thead>
+                <tr><th>train_number</th><th>service_date</th><th>scheduled_departure</th><th>scheduled_arrival</th><th>train_status</th><th>operator_code</th><th>route_id</th></tr>
+            </thead>
+            <tbody>
+                <tr class="new">
+                    <td>{{ result.after.train.train_number }}</td>
+                    <td>{{ result.after.train.service_date }}</td>
+                    <td>{{ result.after.train.scheduled_departure }}</td>
+                    <td>{{ result.after.train.scheduled_arrival }}</td>
+                    <td>{{ result.after.train.train_status }}</td>
+                    <td>{{ result.after.train.operator_code }}</td>
+                    <td>{{ result.after.train.route_id }}</td>
+                </tr>
+            </tbody>
+        </table>
+        {% else %}<p class="muted">(no row)</p>{% endif %}
+    </div>
+
+    <div class="pane before">
+        <h3>coach (before — {{ result.before.coaches | length }} row(s))</h3>
+        {% if result.before.coaches %}
+        <table class="snapshot">
+            <thead>
+                <tr><th>train_number</th><th>service_date</th><th>coach_number</th><th>coach_type</th><th>seat_capacity</th><th>class_code</th></tr>
+            </thead>
+            <tbody>
+                {% for c in result.before.coaches %}
+                <tr>
+                    <td>{{ c.train_number }}</td>
+                    <td>{{ c.service_date }}</td>
+                    <td>{{ c.coach_number }}</td>
+                    <td>{{ c.coach_type }}</td>
+                    <td>{{ c.seat_capacity }}</td>
+                    <td>{{ c.class_code }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p class="muted">(no rows)</p>{% endif %}
+    </div>
+
+    <div class="pane after">
+        <h3>coach (after — {{ result.after.coaches | length }} row(s))</h3>
+        {% if result.after.coaches %}
+        <table class="snapshot">
+            <thead>
+                <tr><th>train_number</th><th>service_date</th><th>coach_number</th><th>coach_type</th><th>seat_capacity</th><th>class_code</th></tr>
+            </thead>
+            <tbody>
+                {% for c in result.after.coaches %}
+                <tr class="new">
+                    <td>{{ c.train_number }}</td>
+                    <td>{{ c.service_date }}</td>
+                    <td>{{ c.coach_number }}</td>
+                    <td>{{ c.coach_type }}</td>
+                    <td>{{ c.seat_capacity }}</td>
+                    <td>{{ c.class_code }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p class="muted">(no rows)</p>{% endif %}
+    </div>
+
+    <div class="pane before">
+        <h3>ticket (before — {{ result.before.tickets | length }} row(s))</h3>
+        {% if result.before.tickets %}
+        <table class="snapshot">
+            <thead>
+                <tr><th>train_number</th><th>service_date</th><th>ticket_number</th><th>seat_number</th><th>price_paid</th><th>passenger_id</th><th>class_code</th><th>booking_status</th></tr>
+            </thead>
+            <tbody>
+                {% for t in result.before.tickets %}
+                <tr>
+                    <td>{{ t.train_number }}</td>
+                    <td>{{ t.service_date }}</td>
+                    <td>{{ t.ticket_number }}</td>
+                    <td>{{ t.seat_number or '—' }}</td>
+                    <td>{{ t.price_paid }}</td>
+                    <td>{{ t.passenger_id }}</td>
+                    <td>{{ t.class_code }}</td>
+                    <td>{{ t.booking_status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p class="muted">(no rows)</p>{% endif %}
+    </div>
+
+    <div class="pane after">
+        <h3>ticket (after — {{ result.after.tickets | length }} row(s))</h3>
+        {% if result.after.tickets %}
+        <table class="snapshot">
+            <thead>
+                <tr><th>train_number</th><th>service_date</th><th>ticket_number</th><th>seat_number</th><th>price_paid</th><th>passenger_id</th><th>class_code</th><th>booking_status</th></tr>
+            </thead>
+            <tbody>
+                {% for t in result.after.tickets %}
+                <tr class="new">
+                    <td>{{ t.train_number }}</td>
+                    <td>{{ t.service_date }}</td>
+                    <td>{{ t.ticket_number }}</td>
+                    <td>{{ t.seat_number or '—' }}</td>
+                    <td>{{ t.price_paid }}</td>
+                    <td>{{ t.passenger_id }}</td>
+                    <td>{{ t.class_code }}</td>
+                    <td>{{ t.booking_status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p class="muted">(no rows)</p>{% endif %}
+    </div>
+
+</div>
+
+<p>
+    <a href="/forms/reschedule-train">Reschedule another train</a> ·
+    <a href="/">Home</a>
+</p>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Railway DBS — Home{% endblock %}
+{% block content %}
+<h1>Railway Travel Classes and Facilities — HW3</h1>
+<p>Booking Clerk · Operations Manager · Passenger</p>
+
+<section>
+    <h2>Forms</h2>
+    <ul>
+        <li><a href="/forms/issue-ticket">Issue Ticket</a> — sell a new ticket to a passenger.</li>
+        <li><a href="/forms/reschedule-train">Reschedule Train</a> — change a train's PK or scheduled times; cascade flows to coach &amp; ticket.</li>
+        <li><a href="/forms/cancel-ticket">Cancel Ticket</a> — delete an existing ticket.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Reports</h2>
+    <ul>
+        <li><a href="/reports/boarding-pass">Boarding Pass</a> — printable single-ticket document.</li>
+        <li><a href="/reports/train-manifest">Train Manifest</a> — passenger list per train.</li>
+        <li><a href="/reports/route-pricing">Route Pricing Schedule</a> — operator/class/route tariff matrix.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>API</h2>
+    <p><a href="/docs">Swagger UI</a> — interactive JSON API documentation.</p>
+</section>
+{% endblock %}

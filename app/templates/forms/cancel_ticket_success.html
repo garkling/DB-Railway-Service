@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Ticket Cancelled{% endblock %}
+{% block content %}
+<h1>Ticket Cancelled</h1>
+<p class="success">
+    Ticket #{{ result.deleted_ticket.ticket_number }} on
+    {{ result.deleted_ticket.train_number }} ({{ result.deleted_ticket.service_date }})
+    deleted.
+    <strong>{{ result.before_tickets | length }}</strong> ticket(s) before,
+    <strong>{{ result.after_tickets | length }}</strong> after.
+</p>
+
+<h2>Deleted ticket</h2>
+<table class="ticket-detail">
+    <tr><th>Train</th><td>{{ result.deleted_ticket.train_number }}</td></tr>
+    <tr><th>Service date</th><td>{{ result.deleted_ticket.service_date }}</td></tr>
+    <tr><th>Ticket #</th><td>{{ result.deleted_ticket.ticket_number }}</td></tr>
+    <tr><th>Seat</th><td>{{ result.deleted_ticket.seat_number or '—' }}</td></tr>
+    <tr><th>Passenger</th><td>{{ result.deleted_ticket.passenger_id }}</td></tr>
+    <tr><th>Class</th><td>{{ result.deleted_ticket.class_code }}</td></tr>
+    <tr><th>Price paid</th><td>{{ result.deleted_ticket.price_paid }}</td></tr>
+    <tr><th>Booking date</th><td>{{ result.deleted_ticket.booking_date }}</td></tr>
+    <tr><th>Status</th><td>{{ result.deleted_ticket.booking_status }}</td></tr>
+    <tr><th>Payment</th><td>{{ result.deleted_ticket.payment_method }}</td></tr>
+</table>
+
+<h2>ticket table — {{ result.deleted_ticket.train_number }} ({{ result.deleted_ticket.service_date }})</h2>
+<div class="cascade-grid">
+    <div class="pane before">
+        <h3>before — {{ result.before_tickets | length }} row(s)</h3>
+        <table class="snapshot">
+            <thead>
+                <tr><th>train_number</th><th>service_date</th><th>ticket_number</th><th>seat_number</th><th>passenger_id</th><th>class_code</th><th>price_paid</th><th>booking_status</th></tr>
+            </thead>
+            <tbody>
+                {% for t in result.before_tickets %}
+                <tr {% if t.ticket_number == result.deleted_ticket.ticket_number %}class="deleted"{% endif %}>
+                    <td>{{ t.train_number }}</td>
+                    <td>{{ t.service_date }}</td>
+                    <td>{{ t.ticket_number }}</td>
+                    <td>{{ t.seat_number or '—' }}</td>
+                    <td>{{ t.passenger_id }}</td>
+                    <td>{{ t.class_code }}</td>
+                    <td>{{ t.price_paid }}</td>
+                    <td>{{ t.booking_status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="pane after">
+        <h3>after — {{ result.after_tickets | length }} row(s)</h3>
+        {% if result.after_tickets %}
+        <table class="snapshot">
+            <thead>
+                <tr><th>train_number</th><th>service_date</th><th>ticket_number</th><th>seat_number</th><th>passenger_id</th><th>class_code</th><th>price_paid</th><th>booking_status</th></tr>
+            </thead>
+            <tbody>
+                {% for t in result.after_tickets %}
+                <tr>
+                    <td>{{ t.train_number }}</td>
+                    <td>{{ t.service_date }}</td>
+                    <td>{{ t.ticket_number }}</td>
+                    <td>{{ t.seat_number or '—' }}</td>
+                    <td>{{ t.passenger_id }}</td>
+                    <td>{{ t.class_code }}</td>
+                    <td>{{ t.price_paid }}</td>
+                    <td>{{ t.booking_status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p class="muted">(no tickets remaining for this train)</p>{% endif %}
+    </div>
+</div>
+
+<p>
+    <a href="/forms/cancel-ticket">Cancel another ticket</a> ·
+    <a href="/">Home</a>
+</p>
+{% endblock %}
